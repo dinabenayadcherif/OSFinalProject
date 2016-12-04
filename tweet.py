@@ -2,34 +2,66 @@ import os
 import json
 import twitter
 import credentials
+import time
+#TODO:
 
-USERS = ['@twitter', '@twitterapi', '@support']
+#SPLIT INTO FORKED PROCESSES
 
-LANGUAGES = ['en']
-
-#Columbus, Cleveland, Buffalo, Pittsburg
-#NW
-Cleveland = "41.49, 81.69"
-#SW
-Columbus = "39.9, 82.9"
-#NE
-Buffalo = "42.8, 78.8"
-#SE
-Pittsburgh ="40.4, 80.0"
-#Columbus, Pittsburg, Bffalo, Cleveland
-
-api = twitter.Api(credentials.consumer_key, credentials.consumer_secret, credentials.access_token_key, credentials.access_token_secret)
+#FOR EACH LOCATION X
+  #Stream tweets from location X
+  #Check Tweet against slur library
+  #Return score
+  #Edit location X running score
+  #Edit global running score
 
 def main():
-    with open('output1.txt', 'a') as f:
-        for line in api.GetStreamFilter(locations=["-81.8791, 41.333","-81.4698, 41.5685"]):
-            #data = json.dumps(line)
-            if 'text' in line:
-                f.write(json.dumps(line["text"]))
-                f.write('\n')
-            #f.write("User: {user}, Tweet: '{tweet}'".format(user=tweets.user.screen_name, tweet=tweets.text))
+  initialize_t()
+  stream_tweets_to_file()
+
+def initialize_t():
+  USERS = ['@twitter', '@twitterapi', '@support']
+  LANGUAGES = ['en']
+
+  #Open API
+  global api
+  api = twitter.Api(credentials.consumer_key, credentials.consumer_secret, credentials.access_token_key, credentials.access_token_secret)
+  
+  #Set location 
+  global location
+  location = [[],[]]
+  global COORDINATES, NAME
+  COORDINATES = 0
+  NAME = 1
+  location[COORDINATES] = ["-81.8791, 41.333","-81.4698, 41.5685"] #Cleveland area location
+  location[NAME] = "Cleveland"
+
+def stream_tweets_to_file():
+  #Name File
+  file_name = "".join(location[NAME]) + '_tweets.txt'
+
+  #MEMORY MANAGEMENT: AVOIDING MULTIPLE-READ-WRITES FOR EACH PROCESS
+  #for each tweet received, write to file
+  for line in api.GetStreamFilter(locations=location[COORDINATES]):
+    if 'text' in line:
+      #get tweet
+      tweet = json.dumps(line["text"])
+
+      #critical section: file access
+      f = open(file_name, 'a')
+      f.write(tweet + '\n')
+      f.close()
+      #end critical section
+      
+      print "A tweet was received!\n"
+
+      #update naught meter
+      update_meters(tweet)
+
+
+def update_meters(tweet):
+  print tweet
 
 
 if __name__ == '__main__':
-    main()
+  main()
 
