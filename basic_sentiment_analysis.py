@@ -137,9 +137,9 @@ def sentence_score(sentence_tokens, previous_token, acum_score):
 def sentiment_score(review):
     return sum([sentence_score(sentence, None, 0.0) for sentence in review])
 
-if __name__ == "__main__":
-    print "enter tweet:"
-    tweet = raw_input()
+def get_tweet_score(tweet):
+   #  print "enter tweet:"
+  #  tweet = raw_input()
     text = """%s""" % tweet
     splitter = Splitter()
     postagger = POSTagger()
@@ -147,7 +147,7 @@ if __name__ == "__main__":
                                     'dicts/inc.yml', 'dicts/dec.yml', 'dicts/inv.yml'])
 
     splitted_sentences = splitter.split(text)
-    pprint(splitted_sentences)
+    #pprint(splitted_sentences)
 
     pos_tagged_sentences = postagger.pos_tag(splitted_sentences)
     #pprint(pos_tagged_sentences)
@@ -157,6 +157,8 @@ if __name__ == "__main__":
 
     #print("analyzing sentiment...")
     score = sentiment_score(dict_tagged_sentences)
-    print(score)
+    return score
 
 
+if __name__ == "__main__":
+    get_tweet_score("trump")
