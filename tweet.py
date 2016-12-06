@@ -3,6 +3,7 @@ import json
 import twitter
 import credentials
 import time
+import basic_sentiment_analysis
 #TODO:
 
 #SPLIT INTO FORKED PROCESSES
@@ -32,8 +33,17 @@ def initialize_t():
   global COORDINATES, NAME
   COORDINATES = 0
   NAME = 1
+  #Shoutout to BoundingBox:  http://boundingbox.klokantech.com/
   location[COORDINATES] = ["-81.8791, 41.333","-81.4698, 41.5685"] #Cleveland area location
   location[NAME] = "Cleveland"
+
+  #set up score meter
+  global meter
+  meter = 0
+  global love_meter
+  love_meter = 0
+  global hate_meter
+  hate_meter = 0
 
 def stream_tweets_to_file():
   #Name File
@@ -51,17 +61,31 @@ def stream_tweets_to_file():
       f.write(tweet + '\n')
       f.close()
       #end critical section
-      
-      print "A tweet was received!\n"
 
       #update naught meter
       update_meters(tweet)
 
+      global meter
+      print "A tweet was received! New scores: "
+      print "hate " + str(hate_meter) + "| love " + str(love_meter)+ " | total " + str(meter)
 
+#updates global "meter" variable with new value
 def update_meters(tweet):
-  print tweet
+  global meter
+  global love_meter
+  global hate_meter
+
+  value = basic_sentiment_analysis.get_tweet_score(tweet)
+  global meter
+  meter = meter + value
+
+  if (value < 0):
+    hate_meter -= hate_meter
+
+  if (value > 0):
+    love_meter += love_meter
+
 
 
 if __name__ == '__main__':
   main()
-
