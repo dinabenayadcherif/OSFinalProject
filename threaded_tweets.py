@@ -9,6 +9,8 @@ import basic_sentiment_analysis
 
 #Child: begins streaming tweets for LOCATION
 def child(location):
+
+
   global locations
   print "location: " + location  + " coordinates: " + str(locations[location])
   # put into twitter-api-friendly format
@@ -18,7 +20,9 @@ def child(location):
     if 'text' in line:
       #get tweet
       tweet = json.dumps(line["text"])
-      print tweet
+
+      print "\n[location: " + location + "] tweet: " + tweet
+  print "Can't access stream"
   return
 
 #Parent: creates children, assigning map location (& API keys?)
@@ -41,5 +45,9 @@ def parent():
     t = threading.Thread(target=child, args=(location,))
     threads.append(t)
     t.start()
+
+  #Probably not necessary
+  #while True:
+  #  time.sleep(1)
 
 parent()
