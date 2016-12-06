@@ -33,6 +33,7 @@ def initialize_t():
   global COORDINATES, NAME
   COORDINATES = 0
   NAME = 1
+  #Shoutout to BoundingBox:  http://boundingbox.klokantech.com/
   location[COORDINATES] = ["-81.8791, 41.333","-81.4698, 41.5685"] #Cleveland area location
   location[NAME] = "Cleveland"
 
