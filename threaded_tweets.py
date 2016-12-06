@@ -7,34 +7,35 @@ import credentials
 import time
 import basic_sentiment_analysis
 
-#Child: begins streaming tweets for LOCATION
+# Child: begins streaming tweets for LOCATION
 def child(location):
   global locations
-  print "location: " + location  + " coordinates: " + str(locations[location])
   # put into twitter-api-friendly format
   coordinates = [locations[location][0], locations[location][1]]
 
+  # Open API connection
+  global api
+  api = twitter.Api(locations[location][2], 
+      locations[location][3],
+      locations[location][4],
+      locations[location][5])
+
+  # loop run with each new tweet
   for line in api.GetStreamFilter(locations=coordinates):
     if 'text' in line:
-      #get tweet
       tweet = json.dumps(line["text"])
-      print tweet
+      print "\n[location: " + location + "] tweet: " + tweet
+
   return
 
-#Parent: creates children, assigning map location (& API keys?)
+# Parent: creates children, assigning map location (& API keys) from YAML
 def parent():
   threads = []
   file = open("dicts/locations.yml", 'r')
 
-  #locations for each state generated from: http://tools.geofabrik.de/calc/
+  # locations for each state generated from: http://tools.geofabrik.de/calc/
   global locations
   locations = yaml.load(file)
-
-  global api
-  api = twitter.Api(credentials.consumer_key, 
-      credentials.consumer_secret, 
-      credentials.access_token_key, 
-      credentials.access_token_secret)
 
   # Generate thread to stream tweets from each state
   for location in locations:
