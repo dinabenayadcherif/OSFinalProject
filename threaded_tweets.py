@@ -3,7 +3,6 @@ import yaml
 import os
 import json
 import twitter
-import credentials
 import time
 import basic_sentiment_analysis
 
@@ -16,7 +15,7 @@ def child(location):
 
   # Open API connection
   global api
-  api = twitter.Api(locations[location][2], 
+  api = twitter.Api(locations[location][2],
       locations[location][3],
       locations[location][4],
       locations[location][5])
@@ -26,7 +25,7 @@ def child(location):
     if 'text' in line:
       tweet = json.dumps(line["text"])
       print "\n[location: " + location + "] tweet: " + tweet
-      
+
       #CRITICAL SECTION
       global meter_lock
       with meter_lock:
