@@ -1,4 +1,4 @@
-import threading
+import threading, thread
 import yaml
 import os
 import json
@@ -28,15 +28,20 @@ def child(location):
       print "\n[location: " + location + "] tweet: " + tweet
       
       #CRITICAL SECTION
-      meter_lock.aquire()
-      try:
-        update_meter(tweet)
-      finally: 
-        meter_lock.release()
+      global meter_lock
+      with meter_lock:
+        meter = update_meter(tweet)
+
+      wr = open('meters.txt', 'w')
+      wr.write(meter)
+
   return
 
 # Parent: creates children, assigning map location (& API keys) from YAML
 def parent():
+  global meter
+  meter = 0
+
   threads = []
   file = open("dicts/locations.yml", 'r')
 
@@ -58,5 +63,6 @@ def update_meter(tweet):
   global meter
   value = basic_sentiment_analysis.get_tweet_score(tweet)
   meter = meter + value
+  return str(meter)
 
 parent()
