@@ -31,7 +31,8 @@ def child(location):
       with meter_lock:
         meter = update_meter(tweet)
 
-      wr = open('meters.txt', 'w')
+      file_name = location + '_meter.txt'
+      wr = open(file_name, 'w')
       wr.write(meter)
 
   return
