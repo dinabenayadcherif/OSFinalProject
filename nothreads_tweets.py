@@ -68,13 +68,11 @@ def parent():
         locations[location][5])
     i = 0
     start_time = time.time()
-    print str(start_time)
 
     # loop run with each new tweet
     for line in api.GetStreamFilter(locations=coordinates):
       if i >= 20:
         end_time = time.time()
-        print str(end_time)
         print "\nLocation: " + location + " processing time: " + str(end_time-start_time) + "for 20 tweets."
         break
       else: 

@@ -41,7 +41,7 @@ def child(location):
           i = 0
           end_time = time.time()
           print "\nLocation: " + location + " processing time: " + str(end_time-start_time) + "for 20 tweets."
-          start_time = time.clock()
+          start_time = time.time()
     
       file_name = location + '_meter.txt'
       wr = open(file_name, 'w')
