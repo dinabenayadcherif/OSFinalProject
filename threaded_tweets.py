@@ -12,9 +12,9 @@ import sys
 def child(location):
   global killer
   global locations
+  local_meter
   # put into twitter-api-friendly format
   coordinates = [locations[location][0], locations[location][1]]
-
 
   # Open API connection
   global api
@@ -26,9 +26,10 @@ def child(location):
   # loop run with each new tweet
   global meter_lock
   with meter_lock:
-    i = 0
-    start_time = time.time()
 
+  #analytics
+  i = 0
+  start_time = time.time()
   for line in api.GetStreamFilter(locations=coordinates):
           
     if 'text' in line:
@@ -38,17 +39,25 @@ def child(location):
       #CRITICAL SECTION
       global meter_lock
       with meter_lock:
-        meter = update_meter(tweet)
-        i+= 1
-        if i >= 20:
-          i = 0
-          end_time = time.time()
-          print "\nLocation: " + location + " processing time: " + str(end_time-start_time) + "for 20 tweets."
-          start_time = time.time()
+        update_global_meter(tweet)
+      
+      i+= 1
+      if i >= 20:
+        i = 0
+        end_time = time.time()
+        print "\nLocation: " + location + " processing time: " + str(end_time-start_time) + "for 20 tweets."
+        start_time = time.time()
     
+      #write to local meter
+      local_meter = local_meter + basic_sentiment_analysis.get_tweet_score(tweet)
       file_name = location + '_meter.txt'
       wr = open(file_name, 'w')
-      wr.write(meter)  
+      wr.write(local_meter)  
+
+     # wr.close()
+
+
+      #write to global meter ??? TODO
 
       # gracefully kill thread if receive sigkill from terminal
       if killer.kill_now:
@@ -66,7 +75,7 @@ def meter_maid():
   #CRITICAL SECTION
     #global meter_lock
     #  with meter_lock:
-    #    meter = update_meter(tweet)
+    #    meter = update_global_meter(tweet)
 
    #    file_name = location + '_meter.txt'
      #  wr = open(file_name, 'w')
@@ -75,8 +84,8 @@ def meter_maid():
 
 # Parent: creates children, assigning map location (& API keys) from YAML
 def parent():
-  global meter
-  meter = 0
+  global global_meter
+  global_meter = 0
 
   threads = []
   file = open("dicts/locations.yml", 'r')
@@ -101,15 +110,26 @@ def parent():
 
   while True:
     time.sleep(1)
+
+    #update global meter
+    global global_meter_lock
+    with global_meter_lock:
+      file_name = location + 'Global_meter.txt'
+      wr = open(file_name, 'w')
+      wr.write(global_meter)  
+
     if killer.kill_now:
       break
 
-def update_meter(tweet):
-  global meter
+def update_global_meter(tweet):
+  global global_meter
   value = basic_sentiment_analysis.get_tweet_score(tweet)
-  meter = meter + value
-  return str(meter)
+  global_meter = global_meter + value
+  return str(global_meter)
 
+def get_sentiment(tweet):
+  value = basic_sentiment_analysis.get_tweet_score(tweet)
+  return value
 
 class GracefulKiller:
   kill_now = False
