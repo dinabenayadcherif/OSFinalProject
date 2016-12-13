@@ -1,3 +1,12 @@
+
+To run the program:
+    
+    Run a multithreaded version of our project:
+        python threaded_tweets.py
+    
+    Run a single threaded version of our project:
+        python singlethread_tweets.py
+
 Writing a program that analyzes the increase in bigoted tweets post-2016 presidential election.
 
 We analyzed the streaming and analysis times for a certain amount of tweets from Atlanta, GA and Cleveland, OH, (10, 20, 40, 60) for multithreaded and not multithreaded programs. Surprisingly, we found that on average for both cities, that the multithreaded programs took longer than alternating every so many tweets to streaming from another location. This can be seen in the Excel worksheet in the repository. 
