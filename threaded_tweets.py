@@ -89,7 +89,7 @@ def parent():
   global killer
   killer = GracefulKiller()
   
-  # Sit and let children do work,
+  # Sit and let children do work, 
   # Occasionally updating the GLOBAL METER
   while True:
     time.sleep(1)
