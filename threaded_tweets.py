@@ -18,22 +18,34 @@ def child(location):
 
   # Open API connection
   global api
-  api = twitter.Api(locations[location][2], 
+  api = twitter.Api(locations[location][2],
       locations[location][3],
       locations[location][4],
       locations[location][5])
 
   # loop run with each new tweet
+  global meter_lock
+  with meter_lock:
+    i = 0
+    start_time = time.time()
+
   for line in api.GetStreamFilter(locations=coordinates):
+          
     if 'text' in line:
       tweet = json.dumps(line["text"])
       print "\n[location: " + location + "] tweet: " + tweet
-      
+
       #CRITICAL SECTION
       global meter_lock
       with meter_lock:
         meter = update_meter(tweet)
-
+        i+= 1
+        if i >= 20:
+          i = 0
+          end_time = time.time()
+          print "\nLocation: " + location + " processing time: " + str(end_time-start_time) + "for 20 tweets."
+          start_time = time.time()
+    
       file_name = location + '_meter.txt'
       wr = open(file_name, 'w')
       wr.write(meter)  
