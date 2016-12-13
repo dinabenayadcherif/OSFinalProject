@@ -27,7 +27,7 @@ def child(location):
   for line in api.GetStreamFilter(locations=coordinates):
     if 'text' in line:
       tweet = json.dumps(line["text"])
-      #print "\n[location: " + location + "] tweet: " + tweet
+      print "\n[location: " + location + "] tweet: " + tweet
       
       #CRITICAL SECTION
       global meter_lock
@@ -43,6 +43,23 @@ def child(location):
         break
 
   return
+
+#analyzes velocity of hate per 10 seconds
+def meter_maid():
+  time.sleep(10)
+
+  global global_meter_lock
+  with global_meter_lock:
+    meter = 0
+  #CRITICAL SECTION
+    #global meter_lock
+    #  with meter_lock:
+    #    meter = update_meter(tweet)
+
+   #    file_name = location + '_meter.txt'
+     #  wr = open(file_name, 'w')
+       #wr.write(meter)  
+
 
 # Parent: creates children, assigning map location (& API keys) from YAML
 def parent():
@@ -69,9 +86,9 @@ def parent():
   # code ripped from http://stackoverflow.com/questions/18499497/how-to-process-sigterm-signal-gracefully
   global killer
   killer = GracefulKiller()
+
   while True:
     time.sleep(1)
-    print("doing something in a loop ...")
     if killer.kill_now:
       break
 
