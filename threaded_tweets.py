@@ -10,6 +10,7 @@ import sys
 
 # Child: begins streaming tweets for LOCATION
 def child(location):
+  local_meter = 0
   global killer
   global locations
   local_meter
@@ -23,10 +24,6 @@ def child(location):
       locations[location][4],
       locations[location][5])
 
-  # loop run with each new tweet
-  global meter_lock
-  with meter_lock:
-
   #analytics
   i = 0
   start_time = time.time()
@@ -37,8 +34,8 @@ def child(location):
       print "\n[location: " + location + "] tweet: " + tweet
 
       #CRITICAL SECTION
-      global meter_lock
-      with meter_lock:
+      global global_meter_lock
+      with global_meter_lock:
         update_global_meter(tweet)
       
       i+= 1
@@ -52,9 +49,8 @@ def child(location):
       local_meter = local_meter + basic_sentiment_analysis.get_tweet_score(tweet)
       file_name = location + '_meter.txt'
       wr = open(file_name, 'w')
-      wr.write(local_meter)  
-
-     # wr.close()
+      wr.write(str(local_meter))  
+      wr.close()
 
 
       #write to global meter ??? TODO
@@ -95,8 +91,8 @@ def parent():
   locations = yaml.load(file)
 
   # create a semaphore for the meter
-  global meter_lock
-  meter_lock = threading.Lock()
+  global global_meter_lock
+  global_meter_lock = threading.Lock()
 
   # Generate thread to stream tweets from each state
   for location in locations:
@@ -116,7 +112,8 @@ def parent():
     with global_meter_lock:
       file_name = location + 'Global_meter.txt'
       wr = open(file_name, 'w')
-      wr.write(global_meter)  
+      wr.write(str(global_meter))
+      wr.close()  
 
     if killer.kill_now:
       break
