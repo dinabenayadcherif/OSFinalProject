@@ -9,7 +9,7 @@ To run the program:
 
 Writing a program that analyzes the increase in bigoted tweets post-2016 presidential election.
 
-We analyzed the streaming and analysis times for a certain amount of tweets from Atlanta, GA and Cleveland, OH, (10, 20, 40, 60) for multithreaded and not multithreaded programs. Surprisingly, we found that on average for both cities, that the multithreaded programs took longer than alternating every so many tweets to streaming from another location. This can be seen in the Excel worksheet in the repository. 
+We analyzed the streaming and analysis times for a certain amount of tweets from Atlanta, GA and Cleveland, OH, (10, 20, 40, 60) for multithreaded and single threaded programs. Surprisingly, we found that on average for both cities, that the multithreaded programs took longer than alternating every so many tweets to streaming from another location. This can be seen in the Excel worksheet in the repository. 
 
 On average for both types of programs, it took longer to stream X amount of tweets from Cleveland, Ohio than to stream X amount of tweets from Atlanta, Georgia. This was not as surprising, because Atlanta is a much more metropolitan city than Cleveland and higher population. Also, our geographical coordinates for location spanned a much larger area for Georgia than for Cleveland. A lot of the time also depends on the Twitter API where we are waiting for tweets to be streamed. As we are not 100% sure as to how the method GetStreamFilter() determines which public tweets it chooses to stream to us, we can only assume there is a higher number of accessible tweets from Atlanta, GA. 
 
