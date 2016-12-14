@@ -37,5 +37,5 @@ An interesting thing to note was that multithreading did pose to be faster for s
 
 Although implementing a single threaded program may be more time efficient, it also can impact the quality of our tweets that we are streaming. We have to alternate between streaming Cleveland, OH tweets and Atlanta, GA tweets which means that we may not catch any current incoming tweets from the connection that is sleeping that we would have caught with a multithreaded program. 
 
-We still do not circumvent the issue, in either multithreaded or single threaded programs, where we are only allowed 2-3 connections open from a specific token, which means that we are also limited to how many cities and areas in the United States we can analyze. 
+We still do not circumvent the issue, in either multithreaded or single threaded programs, where we are only allowed 2-3 connections open from a specific token, which means that we are also limited to how many cities and areas in the United States we can analyze. f
 
