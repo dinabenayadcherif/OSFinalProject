@@ -1,3 +1,5 @@
+The purpose of this program is to analyze the amount of hate spreading across social media using parallelization as a way to optimize data analysis. 
+
 The dicts directory in the folder contains our yaml files that have our basic sentiment dictionaries and our location.yml file that holds our coordinates of where we will be analyzing public tweets from. On our local directory however, our locations.yml file also contained our sensitive information like access tokens and keys for the Twitter API. 
 
 The negative.yml file holds all of our words/phrases that carry around negative sentiment.
@@ -16,8 +18,6 @@ To run the program:
     
     Run a single threaded version of our project:
         python singlethread_tweets.py
-
-Writing a program that analyzes the increase in bigoted tweets post-2016 presidential election.
 
 We analyzed the streaming and analysis times for a certain amount of tweets from Atlanta, GA and Cleveland, OH, (10, 20, 40, 60) for multithreaded and single threaded programs. Surprisingly, we found that on average for both cities, that the multithreaded programs took longer than alternating every so many tweets to streaming from another location. This can be seen in the Excel worksheet in the repository. 
 
