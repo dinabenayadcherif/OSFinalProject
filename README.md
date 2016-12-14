@@ -1,3 +1,13 @@
+The dicts directory in the folder contains our yaml files that have our basic sentiment dictionaries and our location.yml file that holds our coordinates of where we will be analyzing public tweets from. On our local directory however, our locations.yml file also contained our sensitive information like access tokens and keys for the Twitter API. 
+
+The negative.yml file holds all of our words/phrases that carry around negative sentiment.
+
+The positive.yml file holds all of our words/phrases that carry around positive sentiment.
+
+singlethread_tweets.py and threaded_tweets.py both carry out the same process however one uses the main thread for doing all of the streaming and analysis while threaded_tweets.py uses multiple threads. 
+
+These two programs output a couple things, for every location that we analyze, there is an output text file that writes the meter value of how positive or negative the tweets are. The tweets are individually streamed to standard out as well as the processing time. This can be seen in any text file formatted "{location}_meter.txt" in the repository".
+
 
 To run the program:
     
