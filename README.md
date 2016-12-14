@@ -33,5 +33,5 @@ On average for both types of programs, it took longer to stream X amount of twee
 
 An interesting thing to note was that multithreading did pose to be faster for streaming tweets from Cleveland for smaller amounts of tweets. However, as we need to process higher and higher amounts of tweets, we noticed that the processing time of multithreading surpassed the processing time of the single threaded program. 
 
-To understand more about our design decisions, look at the pdf design_decisions.pdf in the repository. It will give a thorough analysis of the processing time for I/O and CPU usage.  
+To understand more about our design decisions, look at the pdf design_decisions.pdf in the repository. It will give a thorough analysis of the processing time for I/O and CPU usage. The pdf also gives a thorough explanation of how fileIO_test_with_writes.py and fileIO_test_withot_writes.py was used for the analysis.   
 
